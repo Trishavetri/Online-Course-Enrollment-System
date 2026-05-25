@@ -1,0 +1,85 @@
+package ui;
+
+import logic.LoginSystem;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class LoginUI extends JFrame {
+
+    JTextField usernameField;
+
+    JPasswordField passwordField;
+
+    public LoginUI() {
+
+        setTitle("Login");
+
+        setSize(400,300);
+
+        setLayout(new FlowLayout());
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        add(new JLabel("Username"));
+
+        usernameField =
+                new JTextField(20);
+
+        add(usernameField);
+
+        add(new JLabel("Password"));
+
+        passwordField =
+                new JPasswordField(20);
+
+        add(passwordField);
+
+        JButton loginBtn =
+                new JButton("Login");
+
+        add(loginBtn);
+
+        loginBtn.addActionListener(
+                e -> loginUser()
+        );
+
+        setVisible(true);
+    }
+
+    void loginUser() {
+
+        String username =
+                usernameField.getText();
+
+        String password =
+                new String(
+                        passwordField.getPassword()
+                );
+
+        boolean status =
+                LoginSystem.login(
+                        username,
+                        password
+                );
+
+        if (status) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Login Successful"
+            );
+
+            dispose();
+
+            new DashboardUI(username);
+
+        } else {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Invalid Login"
+            );
+        }
+    }
+}
