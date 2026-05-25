@@ -1,0 +1,100 @@
+package ui;
+
+import logic.EnrollmentSystem;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class DashboardUI extends JFrame {
+
+    JComboBox<String> courseBox;
+
+    JTextArea resultArea;
+
+    String username;
+
+    public DashboardUI(String username) {
+
+        this.username = username;
+
+        setTitle("Dashboard");
+
+        setSize(600,500);
+
+        setLayout(new FlowLayout());
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        add(new JLabel(
+                "Welcome " + username
+        ));
+
+        String[] courses =
+                EnrollmentSystem.getCourses();
+
+        courseBox =
+                new JComboBox<>(courses);
+
+        add(courseBox);
+
+        JButton enrollBtn =
+                new JButton("Enroll");
+
+        JButton trackBtn =
+                new JButton("Track Enrollments");
+
+        add(enrollBtn);
+
+        add(trackBtn);
+
+        resultArea =
+                new JTextArea(20,40);
+
+        add(new JScrollPane(resultArea));
+
+        enrollBtn.addActionListener(
+                e -> enroll()
+        );
+
+        trackBtn.addActionListener(
+                e -> track()
+        );
+
+        setVisible(true);
+    }
+
+    void enroll() {
+
+        String course =
+                courseBox.getSelectedItem()
+                        .toString();
+
+        boolean status =
+                EnrollmentSystem.enrollCourse(
+                        username,
+                        course
+                );
+
+        if (status) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Enrollment Successful"
+            );
+
+        } else {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Already Enrolled"
+            );
+        }
+    }
+
+    void track() {
+
+        resultArea.setText(
+                EnrollmentSystem.trackEnrollments()
+        );
+    }
+}
